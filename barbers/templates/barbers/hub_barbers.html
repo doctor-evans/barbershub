@@ -1,0 +1,193 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="barber, Barber's Hub, Barbers, Barbershub, shaving, aftershave, hairproduct, hair cream, barbershop, online booking">
+    <meta name="description" content="Find the best barber in your location and get the best result for your desired hairstyle">
+    <meta name="author" content="chancity, Barber's Hub">
+    <title>Barber's hub | Barbers' page </title>
+    <link rel="stylesheet" href="{% static 'barbers/master.css' %}">
+    <link rel="stylesheet" href="{% static 'barbers/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'barbers/barber.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  </head>
+  <body class="barber_version">
+    <!-- Start header -->
+    <header class="top-navbar">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand"  href="/">
+            <img src="{% static 'barbers/logo7.gif' %}" alt="Barber's hub logo" width="150" height="90" />
+          </a>
+          <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbars-rs-food" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbars-rs-food">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a class="nav-link" href="{% url 'barbers:home' %}">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'barbers:service' %}">Our Services</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'barbers:products' %}">Products</a></li>
+              <li class="nav-item active"><a class="nav-link" href="{% url 'barbers:hub_barbers' %}">Our Barbers</a></li>
+              {% if user.is_authenticated %}
+              <li class="nav-item" style="border-left: 1px solid white;"><a class="nav-link" href="{% url 'barbers:profile' %}">Profile</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'barbers:edit_profile' user.profile.slug %}">Edit Profile</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Sign out</a></li>
+              {% else %}
+              <li class="nav-item" style="border-left: 1px solid white;"><a class="nav-link" href="{% url 'account_signup' %}">Join our barbers</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+	<!-- End header -->
+
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+		<div class="all-page-bar">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="title title-1 text-center">
+              <div class="much">
+								<img src="{% static 'barbers/logo7.gif' %}" alt="" width="150" height="90"/>
+
+							</div>
+
+              <div class="title--heading">
+              </div>
+              <div class="clearfix"></div>
+						</div>
+						<!-- .title end -->
+					</div>
+				</div>
+			</div>
+		</div><!-- end all-page-bar -->
+
+		<div id="services" class="section lb">
+			<div class="container">
+				<div class="section-title row text-center">
+					<div class="col-md-8 offset-md-2">
+					<small>Welcome to our community.</small>
+          <small>Search for the best barbers in your location, search with city and state</small>
+					<hr class="grd1">
+					</div>
+				</div><!-- end title -->
+        <div class="row d-flex justify-content-center mt-100">
+            <div class="col-md-4">
+              <form class="flex-nowrap col ml-auto footer-subscribe p-0" method="get" action="{% url 'barbers:search_item' %}">
+                <input type="text" name = 'search' class="form-control" placeholder="Search …">
+                <input type="checkbox" name="homeservice" id="homeservice"<label for="homeservice">Home Services</label>
+                <button type="submit" class="btn bg-white"><i class="fa fa-search p-0"></i></button>
+               </form>
+            </div>
+
+        </div>
+      </div><!-- end title -->
+		</div><!-- end section -->
+    <hr class="grd1">
+    <section class="text-center mb-4">
+      <div class="row wow fadeIn">
+        {% for barber in barbers %}
+        <div class="col-6 col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <a href="{% url 'barbers:spec_barber' barber.slug %}">
+            {% if barber.profile_picture %}
+            <div class="view overlay">
+              <img src="{{ barber.profile_picture.url }}" class="card-img-top img-responsive img-rounded">
+            </div>
+            {% else %}
+            <div class="view overlay">
+              <img src="{% static 'barbers/default.jpeg' %}" class="card-img-top img-responsive img-rounded">
+            </div>
+            {% endif %}
+            </a>
+            <div class="mask rgba-white-slight">
+              <a href="{% url 'barbers:spec_barber' barber.slug %}" class="my-card-btn">{{ barber.user.username }}</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+<!-- <section class="text-center mb-4">
+  <div class="row wow fadeIn">
+    {% for barber in barbers %}
+    <div class="col-lg-3 col-md-6 col-8 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.2s">
+      <div class="widget our-inner-taem clearfix">
+        <div class="t-top"></div>
+        {% if barber.profile_picture %}
+        <div class="hover-br">
+          <img src="{{ barber.profile_picture.url }}" alt="" class="img-responsive">
+        </div>
+        {% else %}
+        <div class="hover-br">
+          <img src="{% static 'barbers/default.jpeg' %}" alt="" class="img-responsive">
+        </div>
+        {% endif %}
+        <div class="team-box">
+          <div class="widget-title">
+            <h3><a href="{% url 'barbers:spec_barber' barber.slug %}" class="my-card-btn">{{ barber.user.username }}</a></h3>
+          </div>
+          <!-- end title -->
+        <!-- </div>
+        <div class="t-bottom"></div>
+      </div><!--widget -->
+    <!-- </div><!-- end col -->
+  <!-- {% endfor %}
+  </div>
+</section>  -->
+
+    <div class="copyrights" style="color:white;">
+      <div class="container">
+        <div class="footer-distributed">
+          <div class="footer-left">
+            <p class="footer-links">
+              <a href="/">Home</a>
+              <a href="{% url 'barbers:hub_barbers' %}">barbers</a>
+              <a href="/">Contact</a>
+            </p>
+            <div class="pb-4">
+              <a href="https://www.facebook.com/evans.chan3" target="_blank">
+                <i class="fa fa-facebook-f mr-3"></i>
+              </a>
+
+              <a href="https://twitter.com/evanschan1" target="_blank">
+                <i class="fa fa-twitter mr-3"></i>
+              </a>
+
+              <a href="https://www.youtube.com/channel/UCDzhr_JjCUrTZ4SU7j9gxvg" target="_blank">
+                <i class="fa fa-youtube mr-3"></i>
+              </a>
+
+
+              <a href="https://github.com/doctor-evans" target="_blank">
+                <i class="fa fa-github mr-3"></i>
+              </a>
+
+              <a href="https://www.instagram.com/evans__chan" target="_blank">
+                <i class="fa fa-instagram mr-3"></i>
+              </a>
+            </div>
+            <p class="The barber's Hub">All Rights Reserved. &copy; 2020  Design By : chancity with &#9829;</p>
+          </div>
+        </div>
+      </div><!-- end container -->
+    </div><!-- end copyrights -->
+	</div>
+
+  </body>
+</html>

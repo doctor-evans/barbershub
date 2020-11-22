@@ -1,0 +1,9 @@
+{% load static %}
+
+
+main{
+  background: url('/static/barbers/about-bg.jpg') no-repeat center;
+  background-size: cover;
+  height: 500px;
+  overflow: scroll;
+}
